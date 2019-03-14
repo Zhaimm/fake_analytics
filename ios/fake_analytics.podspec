@@ -16,9 +16,11 @@ A new Flutter plugin.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   # 百度
+  s.static_framework = true
   s.dependency 'FakeMobileAnalytics/Baidu', '~> 1.0.0'
   s.prefix_header_contents = '#import <FakeMobileAnalytics/FakeMobileAnalytics+Baidu.h>'
 #  # TalkingData
+#  s.static_framework = true
 #  s.dependency 'FakeMobileAnalytics/Talkingdata', '~> 1.0.0'
 #  s.prefix_header_contents = '#import <FakeMobileAnalytics/FakeMobileAnalytics+Talkingdata.h>'
 
