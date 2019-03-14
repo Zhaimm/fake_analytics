@@ -1,4 +1,4 @@
-group 'io.github.v7lin.fake_analytics'
+group 'io.github.v7lin.fakeanalytics'
 version '1.0-SNAPSHOT'
 
 buildscript {
