@@ -23,7 +23,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FakeAnalytics analytics = FakeAnalytics();
+    Analytics analytics = Analytics();
     if (Platform.isAndroid) {
       analytics.startWork(
         appKey: '86eaf64920',
@@ -37,29 +37,24 @@ class MyApp extends StatelessWidget {
         enableDebug: true,
       );
     }
-    return FakeAnalyticsProvider(
+    return AnalyticsProvider(
       analytics: analytics,
       child: MaterialApp(
-        home: FakeAnalyticsWidget(
-          analytics: analytics,
-          nameExtractor: _nameExtractor,
-          child: Home(),
-        ),
         routes: {
-//          Navigator.defaultRouteName: (BuildContext context) {
-//            print('xxx');/// issue iOS初始化会调用三次
-//            return FakeAnalyticsWidget(
-//              analytics: analytics,
-//              nameExtractor: _nameExtractor,
-//              child: Home(),
-//            );
-//          },
-          '/about': (BuildContext context) => FakeAnalyticsWidget(
+          Navigator.defaultRouteName: (BuildContext context) {
+            print('xxx'); // issue iOS初始化会调用三次
+            return AnalyticsWidget(
+              analytics: analytics,
+              nameExtractor: _nameExtractor,
+              child: Home(),
+            );
+          },
+          '/about': (BuildContext context) => AnalyticsWidget(
                 analytics: analytics,
                 nameExtractor: _nameExtractor,
                 child: About(),
               ),
-          '/feedback': (BuildContext context) => FakeAnalyticsWidget(
+          '/feedback': (BuildContext context) => AnalyticsWidget(
                 analytics: analytics,
                 nameExtractor: _nameExtractor,
                 child: Feedback(),
@@ -112,7 +107,7 @@ class _HomeState extends State<Home> {
         child: GestureDetector(
           child: Text('${Platform.operatingSystem}'),
           onTap: () {
-            FakeAnalyticsProvider.of(context).analytics.trackEvent(
+            AnalyticsProvider.of(context).analytics.trackEvent(
                   eventId: '关于',
                   eventLabel: '首页',
                 );
