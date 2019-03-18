@@ -2,8 +2,8 @@ import 'package:fake_analytics/src/analytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fake_analytics/src/analytics_foundation.dart';
 
-class FakeAnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-  FakeAnalyticsRouteObserver({
+class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
+  AnalyticsRouteObserver({
     @required this.analytics,
     this.nameExtractor = defaultNameExtractor,
   }) : assert(analytics != null);

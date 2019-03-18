@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
               ),
         },
         navigatorObservers: [
-          FakeAnalyticsRouteObserver(
+          AnalyticsRouteObserver(
             analytics: analytics,
             nameExtractor: _nameExtractor,
           )
