@@ -21,7 +21,8 @@ flutter版百度移动统计SDK
 
 ## flutter
 
-### snapshot
+* snapshot
+
 ````
 dependencies:
   fake_analytics:
@@ -29,14 +30,11 @@ dependencies:
       url: https://github.com/v7lin/fake_analytics.git
 ````
 
-### release
-````
-latestVersion = 0.1.0+1
-````
+* release
 
 ````
 dependencies:
-  fake_analytics: ^${latestVersion}
+  fake_analytics: ^${latestTag}
 ````
 
 ## Getting Started
