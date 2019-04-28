@@ -37,6 +37,10 @@ dependencies:
   fake_analytics: ^${latestTag}
 ````
 
+* example
+
+[示例](./example/lib/main.dart)
+
 ## Getting Started
 
 This project is a starting point for a Flutter
