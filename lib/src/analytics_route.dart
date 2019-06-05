@@ -3,7 +3,6 @@ import 'package:fake_analytics/src/analytics_foundation.dart';
 import 'package:flutter/widgets.dart';
 
 class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-
   AnalyticsRouteObserver({
     @required this.analytics,
     this.nameExtractor = defaultNameExtractor,

@@ -48,7 +48,8 @@ class _AnalyticsWidgetState extends State<AnalyticsWidget>
         Route<dynamic> route = ModalRoute.of<dynamic>(context);
         if (route.isFirst) {
           _shouldPopSystem = true;
-          widget.analytics.stopPageTracking(pageName: widget.nameExtractor(route));
+          widget.analytics
+              .stopPageTracking(pageName: widget.nameExtractor(route));
         }
       }
       return result;
@@ -64,15 +65,18 @@ class _AnalyticsWidgetState extends State<AnalyticsWidget>
         /// release 启动首页时候，会先调用一次 resumed
         if (Platform.isAndroid) {
           if (!_isReleaseMode() || !route.isFirst || _lifeResumed) {
-            widget.analytics.resumePageTracking(pageName: widget.nameExtractor(route));
+            widget.analytics
+                .resumePageTracking(pageName: widget.nameExtractor(route));
           }
         } else {
-          widget.analytics.resumePageTracking(pageName: widget.nameExtractor(route));
+          widget.analytics
+              .resumePageTracking(pageName: widget.nameExtractor(route));
         }
         _lifeResumed = true;
       } else if (state == AppLifecycleState.paused) {
         if (!_shouldPopSystem) {
-          widget.analytics.pausePageTracking(pageName: widget.nameExtractor(route));
+          widget.analytics
+              .pausePageTracking(pageName: widget.nameExtractor(route));
         }
       }
     }
