@@ -15,10 +15,14 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPush(route, previousRoute);
     if (previousRoute != null && previousRoute is PageRoute) {
-      analytics.pausePageTracking(pageName: nameExtractor(previousRoute));
+      analytics.pausePageTracking(
+        pageName: nameExtractor(previousRoute),
+      );
     }
     if (route != null && route is PageRoute) {
-      analytics.startPageTracking(pageName: nameExtractor(route));
+      analytics.startPageTracking(
+        pageName: nameExtractor(route),
+      );
     }
   }
 
@@ -26,10 +30,14 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
     if (route != null && route is PageRoute) {
-      analytics.stopPageTracking(pageName: nameExtractor(route));
+      analytics.stopPageTracking(
+        pageName: nameExtractor(route),
+      );
     }
     if (previousRoute != null && previousRoute is PageRoute) {
-      analytics.resumePageTracking(pageName: nameExtractor(previousRoute));
+      analytics.resumePageTracking(
+        pageName: nameExtractor(previousRoute),
+      );
     }
   }
 
@@ -37,11 +45,15 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void didRemove(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didRemove(route, previousRoute);
     if (route != null && route is PageRoute) {
-      analytics.stopPageTracking(pageName: nameExtractor(route));
+      analytics.stopPageTracking(
+        pageName: nameExtractor(route),
+      );
     }
     if (previousRoute != null && previousRoute is PageRoute) {
       if (previousRoute.isCurrent) {
-        analytics.resumePageTracking(pageName: nameExtractor(previousRoute));
+        analytics.resumePageTracking(
+          pageName: nameExtractor(previousRoute),
+        );
       }
     }
   }
@@ -50,12 +62,18 @@ class AnalyticsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     if (oldRoute != null && oldRoute is PageRoute) {
-      analytics.stopPageTracking(pageName: nameExtractor(oldRoute));
+      analytics.stopPageTracking(
+        pageName: nameExtractor(oldRoute),
+      );
     }
     if (newRoute != null && newRoute is PageRoute) {
-      analytics.startPageTracking(pageName: nameExtractor(newRoute));
+      analytics.startPageTracking(
+        pageName: nameExtractor(newRoute),
+      );
       if (!newRoute.isCurrent) {
-        analytics.pausePageTracking(pageName: nameExtractor(newRoute));
+        analytics.pausePageTracking(
+          pageName: nameExtractor(newRoute),
+        );
       }
     }
   }
