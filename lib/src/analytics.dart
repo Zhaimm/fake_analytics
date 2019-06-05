@@ -132,7 +132,7 @@ class Analytics {
     );
   }
 
-  /// 统计页面开始时间
+  /// 统计页面开始
   Future<void> startPageTracking({
     @required String pageName,
   }) {
@@ -145,19 +145,25 @@ class Analytics {
     );
   }
 
+  /// 统计页面恢复
   Future<void> resumePageTracking({
     @required String pageName,
   }) {
-    return startPageTracking(pageName: pageName);
+    return startPageTracking(
+      pageName: pageName,
+    );
   }
 
+  /// 统计页面暂停
   Future<void> pausePageTracking({
     @required String pageName,
   }) {
-    return stopPageTracking(pageName: pageName);
+    return stopPageTracking(
+      pageName: pageName,
+    );
   }
 
-  /// 统计页面结束时间
+  /// 统计页面结束
   Future<void> stopPageTracking({
     @required String pageName,
   }) {
