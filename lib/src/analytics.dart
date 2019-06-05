@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class Analytics {
@@ -142,6 +143,18 @@ class Analytics {
         _ARGUMENT_KEY_PAGENAME: pageName,
       },
     );
+  }
+
+  Future<void> resumePageTracking({
+    @required String pageName,
+  }) {
+    return startPageTracking(pageName: pageName);
+  }
+
+  Future<void> pausePageTracking({
+    @required String pageName,
+  }) {
+    return stopPageTracking(pageName: pageName);
   }
 
   /// 统计页面结束时间

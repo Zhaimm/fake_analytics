@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:fake_analytics/src/analytics.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fake_analytics/src/analytics_foundation.dart';
+import 'package:flutter/widgets.dart';
 
 class AnalyticsWidget extends StatefulWidget {
   AnalyticsWidget({
@@ -26,7 +26,8 @@ class AnalyticsWidget extends StatefulWidget {
 
 class _AnalyticsWidgetState extends State<AnalyticsWidget>
     with WidgetsBindingObserver {
-  bool _firstLifeResumed = true;
+  bool _lifeResumed = false;
+  bool _shouldPopSystem = false;
 
   @override
   void initState() {
@@ -41,6 +42,20 @@ class _AnalyticsWidgetState extends State<AnalyticsWidget>
   }
 
   @override
+  Future<bool> didPopRoute() {
+    return super.didPopRoute().then((bool result) {
+      if (!result) {
+        Route<dynamic> route = ModalRoute.of<dynamic>(context);
+        if (route.isFirst) {
+          _shouldPopSystem = true;
+          widget.analytics.stopPageTracking(pageName: widget.nameExtractor(route));
+        }
+      }
+      return result;
+    });
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     Route<dynamic> route = ModalRoute.of<dynamic>(context);
@@ -48,40 +63,23 @@ class _AnalyticsWidgetState extends State<AnalyticsWidget>
       if (state == AppLifecycleState.resumed) {
         /// release 启动首页时候，会先调用一次 resumed
         if (Platform.isAndroid) {
-          if (!_isReleaseMode() || !route.isFirst || !_firstLifeResumed) {
-            widget.analytics.startPageTracking(
-              pageName: widget.nameExtractor(route.settings),
-            );
+          if (!_isReleaseMode() || !route.isFirst || _lifeResumed) {
+            widget.analytics.resumePageTracking(pageName: widget.nameExtractor(route));
           }
         } else {
-          widget.analytics.startPageTracking(
-            pageName: widget.nameExtractor(route.settings),
-          );
+          widget.analytics.resumePageTracking(pageName: widget.nameExtractor(route));
         }
-        _firstLifeResumed = false;
+        _lifeResumed = true;
       } else if (state == AppLifecycleState.paused) {
-        widget.analytics.stopPageTracking(
-          pageName: widget.nameExtractor(route.settings),
-        );
+        if (!_shouldPopSystem) {
+          widget.analytics.pausePageTracking(pageName: widget.nameExtractor(route));
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Route<dynamic> route = ModalRoute.of<dynamic>(context);
-    if (route.isFirst) {
-      /// WillPopScope 会阻止侧滑返回功能
-      return WillPopScope(
-        child: widget.child,
-        onWillPop: () {
-          widget.analytics.stopPageTracking(
-            pageName: widget.nameExtractor(route.settings),
-          );
-          return Future<bool>.value(true);
-        },
-      );
-    }
     return widget.child;
   }
 

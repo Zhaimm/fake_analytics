@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-typedef String AnalyticsNameExtractor(RouteSettings settings);
+typedef String AnalyticsNameExtractor(Route<dynamic> route);
 
-String defaultNameExtractor(RouteSettings settings) => settings.name;
+String defaultNameExtractor(Route<dynamic> route) => route.settings.name;

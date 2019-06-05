@@ -23,6 +23,11 @@ flutter版百度移动统计SDK
 
 ## flutter
 
+* 重点 --- 请勿使用 Navigator 的以下几种方式路由
+pushAndRemoveUntil
+pushNamedAndRemoveUntil
+removeRouteBelow
+
 * snapshot
 
 ````

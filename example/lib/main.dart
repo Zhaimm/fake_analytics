@@ -81,8 +81,8 @@ class MyApp extends StatelessWidget {
     '/feedback': '反馈'
   };
 
-  String _nameExtractor(RouteSettings settings) {
-    String routeName = settings.name;
+  String _nameExtractor(Route<dynamic> route) {
+    String routeName = route.settings.name;
     return _pageNameMap.containsKey(routeName)
         ? _pageNameMap[routeName]
         : routeName;
@@ -166,5 +166,26 @@ class _FeedbackState extends State<Feedback> {
         ),
       ),
     );
+  }
+}
+
+class AnalyticsProvider extends InheritedWidget {
+  AnalyticsProvider({
+    Key key,
+    @required this.analytics,
+    @required Widget child,
+  }) : super(key: key, child: child);
+
+  final Analytics analytics;
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    AnalyticsProvider oldProvider = oldWidget as AnalyticsProvider;
+    return analytics != oldProvider.analytics;
+  }
+
+  static AnalyticsProvider of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(AnalyticsProvider)
+    as AnalyticsProvider;
   }
 }
