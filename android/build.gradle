@@ -36,8 +36,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // 百度
-    implementation 'io.github.v7lin:mobile-analytics-baidu-android:1.0.0'
-//    // TalkingData
-//    implementation 'io.github.v7lin:mobile-analytics-talkingdata-android:1.0.0'
+    // TalkingData
+    implementation 'io.github.v7lin:talkingdata-analytics-android:4.0.21'
 }

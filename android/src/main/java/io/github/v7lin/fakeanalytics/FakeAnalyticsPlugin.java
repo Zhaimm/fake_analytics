@@ -1,11 +1,17 @@
 package io.github.v7lin.fakeanalytics;
 
+import android.text.TextUtils;
+
+import com.tendcloud.tenddata.TCAgent;
+import com.tendcloud.tenddata.TDAccount;
+
+import java.util.Map;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import mobile.analytics.android.MobileAnalytics;
 
 /**
  * FakeAnalyticsPlugin
@@ -23,22 +29,21 @@ public class FakeAnalyticsPlugin implements MethodCallHandler {
     private static final String METHOD_STARTWORK = "startWork";
     private static final String METHOD_SIGNUP = "signUp";
     private static final String METHOD_SIGNIN = "signIn";
-    private static final String METHOD_SIGNOUT = "signOut";
     private static final String METHOD_TRACKEVENT = "trackEvent";
-    private static final String METHOD_STARTEVENTTRACKING = "startEventTracking";
-    private static final String METHOD_STOPEVENTTRACKING = "stopEventTracking";
     private static final String METHOD_STARTPAGETRACKING = "startPageTracking";
     private static final String METHOD_STOPPAGETRACKING = "stopPageTracking";
 
-    private static final String ARGUMENT_KEY_APPKEY = "appKey";
-    private static final String ARGUMENT_KEY_APPCHANNEL = "appChannel";
+    private static final String ARGUMENT_KEY_APPID = "appId";
+    private static final String ARGUMENT_KEY_CHANNELID = "channelId";
     private static final String ARGUMENT_KEY_ENABLEDEBUG = "enableDebug";
 
-    private static final String ARGUMENT_KEY_USERID = "userId";
-    private static final String ARGUMENT_KEY_USERNICK = "userNick";
+    private static final String ARGUMENT_KEY_TYPE = "type";
+    private static final String ARGUMENT_KEY_UID = "uid";
+    private static final String ARGUMENT_KEY_NAME = "name";
 
     private static final String ARGUMENT_KEY_EVENTID = "eventId";
     private static final String ARGUMENT_KEY_EVENTLABEL = "eventLabel";
+    private static final String ARGUMENT_KEY_EVENTPARAMS = "eventParams";
 
     private static final String ARGUMENT_KEY_PAGENAME = "pageName";
 
@@ -51,49 +56,50 @@ public class FakeAnalyticsPlugin implements MethodCallHandler {
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         if (METHOD_STARTWORK.equals(call.method)) {
-            String appKey = call.argument(ARGUMENT_KEY_APPKEY);
-            String appChannel = call.argument(ARGUMENT_KEY_APPCHANNEL);
+            String appId = call.argument(ARGUMENT_KEY_APPID);
+            String channelId = call.argument(ARGUMENT_KEY_CHANNELID);
             boolean enableDebug = call.argument(ARGUMENT_KEY_ENABLEDEBUG);
-            MobileAnalytics.with(registrar.context()).startWork(appKey, appChannel, enableDebug);
+            TCAgent.init(registrar.context(), appId, channelId);
+            TCAgent.setReportUncaughtExceptions(true);
+            TCAgent.LOG_ON = enableDebug;
             result.success(null);
         } else if (METHOD_SIGNUP.equals(call.method)) {
-            String userId = call.argument(ARGUMENT_KEY_USERID);
-            String userNick = call.argument(ARGUMENT_KEY_USERNICK);
-            MobileAnalytics.with(registrar.context()).signUp(userId, userNick);
+            int type = call.argument(ARGUMENT_KEY_TYPE);
+            String uid = call.argument(ARGUMENT_KEY_UID);
+            String name = call.argument(ARGUMENT_KEY_NAME);
+            TCAgent.onRegister(uid, convertToAccountType(type), name);
             result.success(null);
         } else if (METHOD_SIGNIN.equals(call.method)) {
-            String userId = call.argument(ARGUMENT_KEY_USERID);
-            String userNick = call.argument(ARGUMENT_KEY_USERNICK);
-            MobileAnalytics.with(registrar.context()).signIn(userId, userNick);
-            result.success(null);
-        } else if (METHOD_SIGNOUT.equals(call.method)) {
-            MobileAnalytics.with(registrar.context()).signOut();
+            int type = call.argument(ARGUMENT_KEY_TYPE);
+            String uid = call.argument(ARGUMENT_KEY_UID);
+            String name = call.argument(ARGUMENT_KEY_NAME);
+            TCAgent.onLogin(uid, convertToAccountType(type), name);
             result.success(null);
         } else if (METHOD_TRACKEVENT.equals(call.method)) {
             String eventId = call.argument(ARGUMENT_KEY_EVENTID);
             String eventLabel = call.argument(ARGUMENT_KEY_EVENTLABEL);
-            MobileAnalytics.with(registrar.context()).trackEvent(eventId, eventLabel);
-            result.success(null);
-        } else if (METHOD_STARTEVENTTRACKING.equals(call.method)) {
-            String eventId = call.argument(ARGUMENT_KEY_EVENTID);
-            String eventLabel = call.argument(ARGUMENT_KEY_EVENTLABEL);
-            MobileAnalytics.with(registrar.context()).startEventTracking(eventId, eventLabel);
-            result.success(null);
-        } else if (METHOD_STOPEVENTTRACKING.equals(call.method)) {
-            String eventId = call.argument(ARGUMENT_KEY_EVENTID);
-            String eventLabel = call.argument(ARGUMENT_KEY_EVENTLABEL);
-            MobileAnalytics.with(registrar.context()).stopEventTracking(eventId, eventLabel);
+            Map<String, Object> eventParams = call.argument(ARGUMENT_KEY_EVENTPARAMS);
+            TCAgent.onEvent(registrar.context(), eventId, !TextUtils.isEmpty(eventLabel) ? eventLabel : "", eventParams);
             result.success(null);
         } else if (METHOD_STARTPAGETRACKING.equals(call.method)) {
             String pageName = call.argument(ARGUMENT_KEY_PAGENAME);
-            MobileAnalytics.with(registrar.context()).startPageTracking(pageName);
+            TCAgent.onPageStart(registrar.context(), pageName);
             result.success(null);
         } else if (METHOD_STOPPAGETRACKING.equals(call.method)) {
             String pageName = call.argument(ARGUMENT_KEY_PAGENAME);
-            MobileAnalytics.with(registrar.context()).stopPageTracking(pageName);
+            TCAgent.onPageEnd(registrar.context(), pageName);
             result.success(null);
         } else {
             result.notImplemented();
         }
+    }
+
+    private TDAccount.AccountType convertToAccountType(int type) {
+        for (TDAccount.AccountType accountType : TDAccount.AccountType.values()) {
+            if (accountType.index() == type) {
+                return accountType;
+            }
+        }
+        return TDAccount.AccountType.ANONYMOUS;
     }
 }
