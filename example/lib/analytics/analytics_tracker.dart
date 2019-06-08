@@ -7,7 +7,7 @@ class AnalyticsTracker implements LifecycleTracker {
   AnalyticsTracker({
     @required this.analytics,
     this.nameExtractor = defaultNameExtractor,
-  }): assert(analytics != null);
+  }) : assert(analytics != null);
 
   final Analytics analytics;
   final AnalyticsNameExtractor nameExtractor;

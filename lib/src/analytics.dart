@@ -43,8 +43,8 @@ class Analytics {
 
   static const String _ARGUMENT_KEY_PAGENAME = 'pageName';
 
-  final MethodChannel _channel = const MethodChannel(
-      'v7lin.github.io/fake_analytics');
+  final MethodChannel _channel =
+      const MethodChannel('v7lin.github.io/fake_analytics');
 
   /// 开始统计
   Future<void> startWork({
