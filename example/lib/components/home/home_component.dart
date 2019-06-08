@@ -58,7 +58,7 @@ class _HomeComponentState extends State<HomeComponent> {
                 eventId: 'hij',
                 eventParams: <String, dynamic>{
                   'key-i': 1,
-                  'key-f': 1.0,
+                  'key-f': 3.3,
                   'key-s': 'value',
                 },
               );
