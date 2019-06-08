@@ -6,7 +6,7 @@
 [![Pub Package](https://img.shields.io/pub/v/fake_analytics.svg)](https://pub.dartlang.org/packages/fake_analytics)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/v7lin/fake_analytics/blob/master/LICENSE)
 
-flutter版百度移动统计SDK
+flutter版talkingdata移动统计SDK
 
 ## android
 
@@ -22,11 +22,6 @@ flutter版百度移动统计SDK
 ````
 
 ## flutter
-
-* 重点 --- 请勿使用 Navigator 的以下几种方式路由
-pushAndRemoveUntil
-pushNamedAndRemoveUntil
-removeRouteBelow
 
 * snapshot
 

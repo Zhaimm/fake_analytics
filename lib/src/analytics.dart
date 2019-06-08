@@ -4,46 +4,63 @@ import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 class Analytics {
+  static const int ACCOUNT_TYPE_ANONYMOUS = 0;
+  static const int ACCOUNT_TYPE_REGISTERED = 1;
+  static const int ACCOUNT_TYPE_SINA_WEIBO = 2;
+  static const int ACCOUNT_TYPE_QQ = 3;
+  static const int ACCOUNT_TYPE_QQ_WEIBO = 4;
+  static const int ACCOUNT_TYPE_ND91 = 5;
+  static const int ACCOUNT_TYPE_WEIXIN = 6;
+  static const int ACCOUNT_TYPE_TYPE1 = 11;
+  static const int ACCOUNT_TYPE_TYPE2 = 12;
+  static const int ACCOUNT_TYPE_TYPE3 = 13;
+  static const int ACCOUNT_TYPE_TYPE4 = 14;
+  static const int ACCOUNT_TYPE_TYPE5 = 15;
+  static const int ACCOUNT_TYPE_TYPE6 = 16;
+  static const int ACCOUNT_TYPE_TYPE7 = 17;
+  static const int ACCOUNT_TYPE_TYPE8 = 18;
+  static const int ACCOUNT_TYPE_TYPE9 = 19;
+  static const int ACCOUNT_TYPE_TYPE10 = 20;
+
   static const String _METHOD_STARTWORK = 'startWork';
   static const String _METHOD_SIGNUP = 'signUp';
   static const String _METHOD_SIGNIN = 'signIn';
-  static const String _METHOD_SIGNOUT = 'signOut';
   static const String _METHOD_TRACKEVENT = 'trackEvent';
-  static const String _METHOD_STARTEVENTTRACKING = 'startEventTracking';
-  static const String _METHOD_STOPEVENTTRACKING = 'stopEventTracking';
   static const String _METHOD_STARTPAGETRACKING = 'startPageTracking';
   static const String _METHOD_STOPPAGETRACKING = 'stopPageTracking';
 
-  static const String _ARGUMENT_KEY_APPKEY = 'appKey';
-  static const String _ARGUMENT_KEY_APPCHANNEL = 'appChannel';
+  static const String _ARGUMENT_KEY_APPID = 'appId';
+  static const String _ARGUMENT_KEY_CHANNELID = 'channelId';
   static const String _ARGUMENT_KEY_ENABLEDEBUG = 'enableDebug';
 
-  static const String _ARGUMENT_KEY_USERID = 'userId';
-  static const String _ARGUMENT_KEY_USERNICK = "userNick";
+  static const String _ARGUMENT_KEY_TYPE = 'type';
+  static const String _ARGUMENT_KEY_UID = "uid";
+  static const String _ARGUMENT_KEY_NAME = "name";
 
   static const String _ARGUMENT_KEY_EVENTID = 'eventId';
   static const String _ARGUMENT_KEY_EVENTLABEL = 'eventLabel';
+  static const String _ARGUMENT_KEY_EVENTPARAMS = 'eventParams';
 
   static const String _ARGUMENT_KEY_PAGENAME = 'pageName';
 
-  final MethodChannel _channel =
-      const MethodChannel('v7lin.github.io/fake_analytics');
+  final MethodChannel _channel = const MethodChannel(
+      'v7lin.github.io/fake_analytics');
 
   /// 开始统计
   Future<void> startWork({
-    @required String appKey,
-    @required AsyncValueGetter<String> appChannel,
+    @required String appId,
+    @required AsyncValueGetter<String> channelId,
     bool enableDebug = false,
   }) async {
-    assert(appKey != null && appKey.isNotEmpty);
-    assert(appChannel != null);
-    String channelId = await appChannel();
-    assert(channelId != null && channelId.isNotEmpty);
+    assert(appId != null && appId.isNotEmpty);
+    assert(channelId != null);
+    String channelIdStr = await channelId();
+    assert(channelIdStr != null && channelIdStr.isNotEmpty);
     await _channel.invokeMethod(
       _METHOD_STARTWORK,
       <String, dynamic>{
-        _ARGUMENT_KEY_APPKEY: appKey,
-        _ARGUMENT_KEY_APPCHANNEL: channelId,
+        _ARGUMENT_KEY_APPID: appId,
+        _ARGUMENT_KEY_CHANNELID: channelIdStr,
         _ARGUMENT_KEY_ENABLEDEBUG: enableDebug,
       },
     );
@@ -51,85 +68,64 @@ class Analytics {
 
   /// 注册
   Future<void> signUp({
-    @required String userId,
-    @required String userNick,
+    int type = ACCOUNT_TYPE_REGISTERED,
+    @required String uid,
+    @required String name,
   }) {
-    assert(userId != null && userId.isNotEmpty);
+    assert(uid != null && uid.isNotEmpty);
+    assert(name != null && name.isNotEmpty);
     return _channel.invokeMethod(
       _METHOD_SIGNUP,
       <String, dynamic>{
-        _ARGUMENT_KEY_USERID: userId,
-        _ARGUMENT_KEY_USERNICK: userNick,
+        _ARGUMENT_KEY_TYPE: type,
+        _ARGUMENT_KEY_UID: uid,
+        _ARGUMENT_KEY_NAME: name,
       },
     );
   }
 
   /// 登录
   Future<void> signIn({
-    @required String userId,
-    @required String userNick,
+    int type = ACCOUNT_TYPE_REGISTERED,
+    @required String uid,
+    @required String name,
   }) {
-    assert(userId != null && userId.isNotEmpty);
+    assert(uid != null && uid.isNotEmpty);
+    assert(name != null && name.isNotEmpty);
     return _channel.invokeMethod(
       _METHOD_SIGNIN,
       <String, dynamic>{
-        _ARGUMENT_KEY_USERID: userId,
-        _ARGUMENT_KEY_USERNICK: userNick,
+        _ARGUMENT_KEY_TYPE: type,
+        _ARGUMENT_KEY_UID: uid,
+        _ARGUMENT_KEY_NAME: name,
       },
     );
-  }
-
-  /// 登出
-  Future<void> signOut() {
-    return _channel.invokeMethod(_METHOD_SIGNOUT);
   }
 
   /// 统计自定义事件发生次数
   Future<void> trackEvent({
     @required String eventId,
-    @required String eventLabel,
+    String eventLabel,
+    Map<String, dynamic> eventParams,
   }) {
     assert(eventId != null && eventId.isNotEmpty);
-    assert(eventLabel != null && eventLabel.isNotEmpty);
-    return _channel.invokeMethod(
-      _METHOD_TRACKEVENT,
-      <String, dynamic>{
-        _ARGUMENT_KEY_EVENTID: eventId,
-        _ARGUMENT_KEY_EVENTLABEL: eventLabel,
-      },
-    );
-  }
-
-  /// 统计自定义事件开始时间
-  Future<void> startEventTracking({
-    @required String eventId,
-    @required String eventLabel,
-  }) {
-    assert(eventId != null && eventId.isNotEmpty);
-    assert(eventLabel != null && eventLabel.isNotEmpty);
-    return _channel.invokeMethod(
-      _METHOD_STARTEVENTTRACKING,
-      <String, dynamic>{
-        _ARGUMENT_KEY_EVENTID: eventId,
-        _ARGUMENT_KEY_EVENTLABEL: eventLabel,
-      },
-    );
-  }
-
-  /// 统计自定义事件结束时间
-  Future<void> stopEventTracking({
-    @required String eventId,
-    @required String eventLabel,
-  }) {
-    assert(eventId != null && eventId.isNotEmpty);
-    assert(eventLabel != null && eventLabel.isNotEmpty);
-    return _channel.invokeMethod(
-      _METHOD_STOPEVENTTRACKING,
-      <String, dynamic>{
-        _ARGUMENT_KEY_EVENTID: eventId,
-        _ARGUMENT_KEY_EVENTLABEL: eventLabel,
-      },
-    );
+    assert(eventLabel == null || eventLabel.isNotEmpty);
+    assert(eventParams == null || eventParams.isNotEmpty);
+    if (eventParams != null) {
+      eventParams.forEach((String key, dynamic value) {
+        assert(value is String || value is num);
+      });
+    }
+    Map<String, dynamic> map = <String, dynamic>{
+      _ARGUMENT_KEY_EVENTID: eventId,
+    };
+    if (eventLabel != null) {
+      map.putIfAbsent(_ARGUMENT_KEY_EVENTLABEL, () => eventLabel);
+    }
+    if (eventParams != null) {
+      map.putIfAbsent(_ARGUMENT_KEY_EVENTPARAMS, () => eventParams);
+    }
+    return _channel.invokeMethod(_METHOD_TRACKEVENT, map);
   }
 
   /// 统计页面开始
@@ -142,24 +138,6 @@ class Analytics {
       <String, dynamic>{
         _ARGUMENT_KEY_PAGENAME: pageName,
       },
-    );
-  }
-
-  /// 统计页面恢复
-  Future<void> resumePageTracking({
-    @required String pageName,
-  }) {
-    return startPageTracking(
-      pageName: pageName,
-    );
-  }
-
-  /// 统计页面暂停
-  Future<void> pausePageTracking({
-    @required String pageName,
-  }) {
-    return stopPageTracking(
-      pageName: pageName,
     );
   }
 

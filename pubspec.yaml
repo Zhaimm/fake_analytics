@@ -1,5 +1,5 @@
 name: fake_analytics
-description: A powerful baidu analytics plugin for Flutter.
+description: A powerful talkingdata analytics plugin for Flutter.
 version: 0.2.0
 author: v7lin <v7lin@qq.com>
 homepage: https://github.com/v7lin/fake_analytics
@@ -16,6 +16,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  fake_lifecycle: ^0.1.0
 
   pedantic: '>=1.4.0 <3.0.0'
 
