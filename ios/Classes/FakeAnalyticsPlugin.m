@@ -37,6 +37,7 @@ static NSString * const ARGUMENT_KEY_PAGENAME = @"pageName";
         NSString * channelId = call.arguments[ARGUMENT_KEY_CHANNELID];
         NSNumber * enableDebug = call.arguments[ARGUMENT_KEY_ENABLEDEBUG];
         [TalkingData sessionStarted:appId withChannelId:channelId];
+        [TalkingData setExceptionReportEnabled:YES];
         [TalkingData setLogEnabled:enableDebug.boolValue];
         result(nil);
     } else if ([METHOD_SIGNUP isEqualToString:call.method]) {
