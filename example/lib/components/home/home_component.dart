@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../../app/app_view_model.dart';
 import '../../navigator/navigator.dart';
 
 class HomeComponent extends StatefulWidget {
@@ -23,6 +24,58 @@ class _HomeComponentState extends State<HomeComponent> {
             title: const Text('Analytics'),
             onTap: () {
               Navigator.of(context).pushNamed(AppNavigator.analytics);
+            },
+          ),
+          ListTile(
+            title: const Text('Sign In'),
+            onTap: () {
+              AppViewModel.of(context)
+                  .analytics
+                  .signIn(uid: 'abc', name: 'abc');
+            },
+          ),
+          ListTile(
+            title: const Text('Track Event - eventId'),
+            onTap: () {
+              AppViewModel.of(context).analytics.trackEvent(
+                    eventId: 'abc',
+                  );
+            },
+          ),
+          ListTile(
+            title: const Text('Track Event - eventId, eventLabel'),
+            onTap: () {
+              AppViewModel.of(context).analytics.trackEvent(
+                    eventId: 'efg',
+                    eventLabel: 'efg',
+                  );
+            },
+          ),
+          ListTile(
+            title: const Text('Track Event - eventId, eventParams'),
+            onTap: () {
+              AppViewModel.of(context).analytics.trackEvent(
+                eventId: 'hij',
+                eventParams: <String, dynamic>{
+                  'key-i': 1,
+                  'key-f': 1.0,
+                  'key-s': 'value',
+                },
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Track Event - eventId, eventLabel, eventParams'),
+            onTap: () {
+              AppViewModel.of(context).analytics.trackEvent(
+                eventId: 'klm',
+                eventLabel: 'klm',
+                eventParams: <String, dynamic>{
+                  'key-i': 1,
+                  'key-f': 1.0,
+                  'key-s': 'value',
+                },
+              );
             },
           ),
         ],
