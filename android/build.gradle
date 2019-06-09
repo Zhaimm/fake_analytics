@@ -37,5 +37,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // TalkingData
-    implementation 'io.github.v7lin:talkingdata-analytics-android:4.0.21'
+    implementation 'io.github.v7lin:talkingdata-analytics-android:4.0.27'
 }

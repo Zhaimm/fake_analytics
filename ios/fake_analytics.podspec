@@ -17,7 +17,7 @@ A new Flutter plugin.
   s.dependency 'Flutter'
   # TalkingData
   s.static_framework = true
-  s.dependency 'FakeTalkingdataAnalytics', '~> 4.0.21'
+  s.dependency 'FakeTalkingdataAnalytics', '~> 4.0.33'
 
   s.ios.deployment_target = '8.0'
 end
