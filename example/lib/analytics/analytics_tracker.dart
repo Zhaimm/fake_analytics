@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'analytics_foundation.dart';
 
 class AnalyticsTracker implements LifecycleTracker {
-  AnalyticsTracker({
+  const AnalyticsTracker({
     @required this.analytics,
     this.nameExtractor = defaultNameExtractor,
   }) : assert(analytics != null);
