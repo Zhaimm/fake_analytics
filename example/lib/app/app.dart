@@ -1,4 +1,3 @@
-import 'package:fake_analytics/fake_analytics.dart';
 import 'package:fake_lifecycle/fake_lifecycle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,9 +45,12 @@ class _RawApp extends StatelessWidget {
         Widget child,
         AppViewModel model,
       ) {
+        LifecycleTracker tracker = AnalyticsTracker(
+          analytics: model.analytics,
+        );
         return MaterialApp(
           onGenerateRoute: (RouteSettings settings) =>
-              _lifecycleRouteRoute(model.analytics, settings),
+              _lifecycleRouteRoute(settings, tracker),
           builder: (BuildContext context, Widget child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(
@@ -60,10 +62,7 @@ class _RawApp extends StatelessWidget {
           },
           navigatorObservers: <NavigatorObserver>[
             LifecycleRouteObserver(
-              tracker: AnalyticsTracker(
-                analytics: model.analytics,
-                nameExtractor: _nameExtractor,
-              ),
+              tracker: tracker,
             ),
           ],
           theme: ThemeData.light().copyWith(
@@ -75,7 +74,9 @@ class _RawApp extends StatelessWidget {
   }
 
   Route<dynamic> _lifecycleRouteRoute(
-      Analytics analytics, RouteSettings settings) {
+    RouteSettings settings,
+    LifecycleTracker tracker,
+  ) {
     return CupertinoPageRoute<dynamic>(
       builder: (BuildContext context) {
         Widget component;
@@ -94,18 +95,11 @@ class _RawApp extends StatelessWidget {
             break;
         }
         return LifecycleWidget(
-          tracker: AnalyticsTracker(
-            analytics: analytics,
-            nameExtractor: _nameExtractor,
-          ),
+          tracker: tracker,
           child: component,
         );
       },
       settings: settings,
     );
-  }
-
-  String _nameExtractor(Route<dynamic> route) {
-    return route.settings.name;
   }
 }
