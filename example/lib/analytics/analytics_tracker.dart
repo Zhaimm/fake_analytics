@@ -13,18 +13,24 @@ class AnalyticsTracker implements LifecycleTracker {
   final AnalyticsNameExtractor nameExtractor;
 
   @override
-  void trackStartRoute({Route<dynamic> route}) {}
+  void trackStartRoute({Route<dynamic> route}) {
+    print('Start - ${route.settings.name}');
+  }
 
   @override
   void trackResumeRoute({Route<dynamic> route}) {
+    print('Resume - ${route.settings.name}');
     analytics.startPageTracking(pageName: nameExtractor(route));
   }
 
   @override
   void trackPauseRoute({Route<dynamic> route}) {
+    print('Pause - ${route.settings.name}');
     analytics.stopPageTracking(pageName: nameExtractor(route));
   }
 
   @override
-  void trackStopRoute({Route<dynamic> route}) {}
+  void trackStopRoute({Route<dynamic> route}) {
+    print('Stop - ${route.settings.name}');
+  }
 }
