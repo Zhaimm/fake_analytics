@@ -67,7 +67,7 @@ class _RawApp extends StatelessWidget {
             ),
           ],
           theme: ThemeData.light().copyWith(
-            platform: TargetPlatform.iOS,
+            platform: TargetPlatform.android,
           ),
         );
       },
@@ -76,7 +76,7 @@ class _RawApp extends StatelessWidget {
 
   Route<dynamic> _lifecycleRouteRoute(
       Analytics analytics, RouteSettings settings) {
-    return MaterialPageRoute<dynamic>(
+    return CupertinoPageRoute<dynamic>(
       builder: (BuildContext context) {
         Widget component;
         switch (settings.name) {
