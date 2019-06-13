@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../navigator/navigator.dart';
 
-//import 'package:flutter_example/components/licenses/licenses_component.dart';
-//import 'package:flutter_example/lifecycle/widgets.dart';
-//import 'package:flutter_example/navigator/navigator.dart';
-
 class AnalyticsComponent extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {

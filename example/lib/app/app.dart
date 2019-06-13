@@ -49,6 +49,15 @@ class _RawApp extends StatelessWidget {
         return MaterialApp(
           onGenerateRoute: (RouteSettings settings) =>
               _lifecycleRouteRoute(model.analytics, settings),
+          builder: (BuildContext context, Widget child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaleFactor: 1.0,
+                boldText: false,
+              ),
+              child: child,
+            );
+          },
           navigatorObservers: <NavigatorObserver>[
             LifecycleRouteObserver(
               tracker: AnalyticsTracker(
