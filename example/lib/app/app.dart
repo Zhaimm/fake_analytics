@@ -1,5 +1,4 @@
 import 'package:fake_lifecycle/fake_lifecycle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -37,6 +36,12 @@ class _AppState extends State<App> {
 }
 
 class _RawApp extends StatelessWidget {
+  final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
+    Navigator.defaultRouteName: (BuildContext context) => HomeComponent(),
+    AppNavigator.analytics: (BuildContext context) => AnalyticsComponent(),
+    AppNavigator.about: (BuildContext context) => AboutComponent(),
+  };
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppViewModel>(
@@ -50,7 +55,9 @@ class _RawApp extends StatelessWidget {
         );
         return MaterialApp(
           onGenerateRoute: (RouteSettings settings) =>
-              _lifecycleRouteRoute(settings, tracker),
+              _onGenerateRoute(settings, tracker),
+          onUnknownRoute: (RouteSettings settings) =>
+              _onUnknownRoute(settings, tracker),
           builder: (BuildContext context, Widget child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(
@@ -66,37 +73,40 @@ class _RawApp extends StatelessWidget {
             ),
           ],
           theme: ThemeData.light().copyWith(
-            platform: TargetPlatform.android,
+            platform: TargetPlatform.iOS,
           ),
         );
       },
     );
   }
 
-  Route<dynamic> _lifecycleRouteRoute(
+  Route<dynamic> _onGenerateRoute(
     RouteSettings settings,
     LifecycleTracker tracker,
   ) {
-    return CupertinoPageRoute<dynamic>(
+    WidgetBuilder builder = _routes[settings.name];
+    return MaterialPageRoute<dynamic>(
       builder: (BuildContext context) {
-        Widget component;
-        switch (settings.name) {
-          case Navigator.defaultRouteName:
-            component = HomeComponent();
-            break;
-          case AppNavigator.analytics:
-            component = AnalyticsComponent();
-            break;
-          case AppNavigator.about:
-            component = AboutComponent();
-            break;
-          default:
-            component = NotFoundComponent();
-            break;
-        }
         return LifecycleWidget(
           tracker: tracker,
-          child: component,
+          child: Builder(
+            builder: builder,
+          ),
+        );
+      },
+      settings: settings,
+    );
+  }
+
+  Route<dynamic> _onUnknownRoute(
+    RouteSettings settings,
+    LifecycleTracker tracker,
+  ) {
+    return MaterialPageRoute<dynamic>(
+      builder: (BuildContext context) {
+        return LifecycleWidget(
+          tracker: tracker,
+          child: NotFoundComponent(),
         );
       },
       settings: settings,
