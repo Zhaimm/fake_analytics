@@ -14,6 +14,8 @@ static NSString * const METHOD_STARTWORK = @"startWork";
 static NSString * const METHOD_SIGNUP = @"signUp";
 static NSString * const METHOD_SIGNIN = @"signIn";
 static NSString * const METHOD_TRACKEVENT = @"trackEvent";
+static NSString * const METHOD_TRACKPLACEORDER = @"trackPlaceOrder";
+static NSString * const METHOD_TRACKPAYORDER = @"trackPayOrder";
 static NSString * const METHOD_STARTPAGETRACKING = @"startPageTracking";
 static NSString * const METHOD_STOPPAGETRACKING = @"stopPageTracking";
 
@@ -24,7 +26,10 @@ static NSString * const ARGUMENT_KEY_ENABLEDEBUG = @"enableDebug";
 static NSString * const ARGUMENT_KEY_TYPE = @"type";
 static NSString * const ARGUMENT_KEY_UID = @"uid";
 static NSString * const ARGUMENT_KEY_NAME = @"name";
-
+static NSString * const ARGUMENT_KEY_ORDERID = @"orderId";
+static NSString * const ARGUMENT_KEY_TOTAL = @"total";
+static NSString * const ARGUMENT_KEY_CURRENCYTYPE = @"currencyType";
+static NSString * const ARGUMENT_KEY_PAYTYPE = @"payType";
 static NSString * const ARGUMENT_KEY_EVENTID = @"eventId";
 static NSString * const ARGUMENT_KEY_EVENTLABEL = @"eventLabel";
 static NSString * const ARGUMENT_KEY_EVENTPARAMS = @"eventParams";
@@ -58,6 +63,21 @@ static NSString * const ARGUMENT_KEY_PAGENAME = @"pageName";
         NSDictionary * eventParams = call.arguments[ARGUMENT_KEY_EVENTPARAMS];
         [TalkingData trackEvent:eventId label:eventLabel parameters:eventParams];
         result(nil);
+    } else if ([METHOD_TRACKPLACEORDER isEqualToString:call.method]) {
+        NSString * uid = call.arguments[ARGUMENT_KEY_UID];
+        NSString * orderId = call.arguments[ARGUMENT_KEY_ORDERID];
+        NSNumber * total = call.arguments[ARGUMENT_KEY_TOTAL];
+        NSString * currencyType = call.arguments[ARGUMENT_KEY_CURRENCYTYPE];
+        TalkingDataOrder *order = [TalkingDataOrder createOrder:orderId total:[total intValue] currencyType:currencyType];
+        [TalkingData onPlaceOrder:uid order:order];
+    } else if ([METHOD_TRACKPAYORDER isEqualToString:call.method]) {
+        NSString * uid = call.arguments[ARGUMENT_KEY_UID];
+        NSString * payType = call.arguments[ARGUMENT_KEY_PAYTYPE];
+        NSString * orderId = call.arguments[ARGUMENT_KEY_ORDERID];
+        NSNumber * total = call.arguments[ARGUMENT_KEY_TOTAL];
+        NSString * currencyType = call.arguments[ARGUMENT_KEY_CURRENCYTYPE];
+        TalkingDataOrder *order = [TalkingDataOrder createOrder:orderId total:[total intValue] currencyType:currencyType];
+        [TalkingData onOrderPaySucc:uid payType:payType order:order];
     } else if ([METHOD_STARTPAGETRACKING isEqualToString:call.method]) {
         NSString * pageName = call.arguments[ARGUMENT_KEY_PAGENAME];
         [TalkingData trackPageBegin:pageName];
