@@ -17,6 +17,12 @@ flutter版talkingdata移动统计SDK
 * [flutter版腾讯(信鸽)推送SDK](https://github.com/v7lin/fake_push)
 * [flutter版talkingdata移动统计SDK](https://github.com/v7lin/fake_analytics)
 
+## docs
+
+* [TalkingData](https://www.talkingdata.com/spa/app-analytics/#/productCenter)
+* [iOS](http://doc.talkingdata.com/posts/20)
+* [Android](http://doc.talkingdata.com/posts/21)
+
 ## android
 
 ````
