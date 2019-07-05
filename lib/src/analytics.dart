@@ -133,6 +133,7 @@ class Analytics {
     return _channel.invokeMethod(_METHOD_TRACKEVENT, map);
   }
 
+  /// 统计下单
   Future<void> trackPlaceOrder({
     @required String uid,
     @required String orderId,
@@ -154,6 +155,7 @@ class Analytics {
     );
   }
 
+  /// 统计买单
   Future<void> trackPayOrder({
     @required String uid,
     @required String payType,
