@@ -82,23 +82,23 @@ class _HomeComponentState extends State<HomeComponent> {
             title: const Text('Track Place Order'),
             onTap: () {
               AppViewModel.of(context).analytics.trackPlaceOrder(
-                uid: '10086',
-                orderId: '1',
-                total: 100,
-                currencyType: 'CNY',
-              );
+                    uid: '10086',
+                    orderId: '1',
+                    total: 100,
+                    currencyType: 'CNY',
+                  );
             },
           ),
           ListTile(
             title: const Text('Track Pay Order'),
             onTap: () {
               AppViewModel.of(context).analytics.trackPayOrder(
-                uid: '10086',
-                payType: 'Alipay',
-                orderId: '1',
-                total: 100,
-                currencyType: 'CNY',
-              );
+                    uid: '10086',
+                    payType: 'Alipay',
+                    orderId: '1',
+                    total: 100,
+                    currencyType: 'CNY',
+                  );
             },
           ),
         ],
