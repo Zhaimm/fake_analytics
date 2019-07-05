@@ -2,6 +2,7 @@ package io.github.v7lin.fakeanalytics;
 
 import android.text.TextUtils;
 
+import com.tendcloud.tenddata.Order;
 import com.tendcloud.tenddata.TCAgent;
 import com.tendcloud.tenddata.TDAccount;
 
@@ -30,6 +31,8 @@ public class FakeAnalyticsPlugin implements MethodCallHandler {
     private static final String METHOD_SIGNUP = "signUp";
     private static final String METHOD_SIGNIN = "signIn";
     private static final String METHOD_TRACKEVENT = "trackEvent";
+    private static final String METHOD_TRACKPLACEORDER = "trackPlaceOrder";
+    private static final String METHOD_TRACKPAYORDER = "trackPayOrder";
     private static final String METHOD_STARTPAGETRACKING = "startPageTracking";
     private static final String METHOD_STOPPAGETRACKING = "stopPageTracking";
 
@@ -40,7 +43,10 @@ public class FakeAnalyticsPlugin implements MethodCallHandler {
     private static final String ARGUMENT_KEY_TYPE = "type";
     private static final String ARGUMENT_KEY_UID = "uid";
     private static final String ARGUMENT_KEY_NAME = "name";
-
+    private static final String ARGUMENT_KEY_ORDERID = "orderId";
+    private static final String ARGUMENT_KEY_TOTAL = "total";
+    private static final String ARGUMENT_KEY_CURRENCYTYPE = "currencyType";
+    private static final String ARGUMENT_KEY_PAYTYPE = "payType";
     private static final String ARGUMENT_KEY_EVENTID = "eventId";
     private static final String ARGUMENT_KEY_EVENTLABEL = "eventLabel";
     private static final String ARGUMENT_KEY_EVENTPARAMS = "eventParams";
@@ -80,6 +86,21 @@ public class FakeAnalyticsPlugin implements MethodCallHandler {
             String eventLabel = call.argument(ARGUMENT_KEY_EVENTLABEL);
             Map<String, Object> eventParams = call.argument(ARGUMENT_KEY_EVENTPARAMS);
             TCAgent.onEvent(registrar.context(), eventId, !TextUtils.isEmpty(eventLabel) ? eventLabel : "", eventParams);
+            result.success(null);
+        } else if (METHOD_TRACKPLACEORDER.equals(call.method)) {
+            String uid = call.argument(ARGUMENT_KEY_UID);
+            String orderId = call.argument(ARGUMENT_KEY_ORDERID);
+            int total = call.argument(ARGUMENT_KEY_TOTAL);
+            String currencyType = call.argument(ARGUMENT_KEY_CURRENCYTYPE);
+            TCAgent.onPlaceOrder(uid, Order.createOrder(orderId, total, currencyType));
+            result.success(null);
+        } else if (METHOD_TRACKPAYORDER.equals(call.method)) {
+            String uid = call.argument(ARGUMENT_KEY_UID);
+            String payType = call.argument(ARGUMENT_KEY_PAYTYPE);
+            String orderId = call.argument(ARGUMENT_KEY_ORDERID);
+            int total = call.argument(ARGUMENT_KEY_TOTAL);
+            String currencyType = call.argument(ARGUMENT_KEY_CURRENCYTYPE);
+            TCAgent.onOrderPaySucc(uid, payType, Order.createOrder(orderId, total, currencyType));
             result.success(null);
         } else if (METHOD_STARTPAGETRACKING.equals(call.method)) {
             String pageName = call.argument(ARGUMENT_KEY_PAGENAME);
