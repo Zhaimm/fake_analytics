@@ -1,11 +1,11 @@
-import 'package:fake_analytics_example/analytics/analytics_tracker.dart';
-import 'package:fake_analytics_example/app/app_view_model.dart';
-import 'package:fake_analytics_example/components/about/about_component.dart';
 import 'package:fake_lifecycle/fake_lifecycle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
+import '../../analytics/analytics_tracker.dart';
+import '../../app/app_view_model.dart';
+import '../../components/about/about_component.dart';
 import '../../navigator/navigator.dart';
 
 class AnalyticsComponent extends StatefulWidget {
