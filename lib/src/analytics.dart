@@ -26,8 +26,6 @@ class Analytics {
   static const String _METHOD_SIGNUP = 'signUp';
   static const String _METHOD_SIGNIN = 'signIn';
   static const String _METHOD_TRACKEVENT = 'trackEvent';
-  static const String _METHOD_TRACKPLACEORDER = 'trackPlaceOrder';
-  static const String _METHOD_TRACKPAYORDER = 'trackPayOrder';
   static const String _METHOD_STARTPAGETRACKING = 'startPageTracking';
   static const String _METHOD_STOPPAGETRACKING = 'stopPageTracking';
 
@@ -38,10 +36,6 @@ class Analytics {
   static const String _ARGUMENT_KEY_TYPE = 'type';
   static const String _ARGUMENT_KEY_UID = "uid";
   static const String _ARGUMENT_KEY_NAME = "name";
-  static const String _ARGUMENT_KEY_ORDERID = "orderId";
-  static const String _ARGUMENT_KEY_TOTAL = "total";
-  static const String _ARGUMENT_KEY_CURRENCYTYPE = "currencyType";
-  static const String _ARGUMENT_KEY_PAYTYPE = "payType";
   static const String _ARGUMENT_KEY_EVENTID = 'eventId';
   static const String _ARGUMENT_KEY_EVENTLABEL = 'eventLabel';
   static const String _ARGUMENT_KEY_EVENTPARAMS = 'eventParams';
@@ -131,53 +125,6 @@ class Analytics {
       map.putIfAbsent(_ARGUMENT_KEY_EVENTPARAMS, () => eventParams);
     }
     return _channel.invokeMethod(_METHOD_TRACKEVENT, map);
-  }
-
-  /// 统计下单
-  Future<void> trackPlaceOrder({
-    @required String uid,
-    @required String orderId,
-    @required int total,
-    @required String currencyType,
-  }) {
-    assert(uid != null && uid.isNotEmpty);
-    assert(orderId != null && orderId.isNotEmpty);
-    assert(total != null);
-    assert(currencyType != null && currencyType.isNotEmpty);
-    return _channel.invokeMethod(
-      _METHOD_TRACKPLACEORDER,
-      <String, dynamic>{
-        _ARGUMENT_KEY_UID: uid,
-        _ARGUMENT_KEY_ORDERID: orderId,
-        _ARGUMENT_KEY_TOTAL: total,
-        _ARGUMENT_KEY_CURRENCYTYPE: currencyType,
-      },
-    );
-  }
-
-  /// 统计买单
-  Future<void> trackPayOrder({
-    @required String uid,
-    @required String payType,
-    @required String orderId,
-    @required int total,
-    @required String currencyType,
-  }) {
-    assert(uid != null && uid.isNotEmpty);
-    assert(payType != null && payType.isNotEmpty);
-    assert(orderId != null && orderId.isNotEmpty);
-    assert(total != null);
-    assert(currencyType != null && currencyType.isNotEmpty);
-    return _channel.invokeMethod(
-      _METHOD_TRACKPAYORDER,
-      <String, dynamic>{
-        _ARGUMENT_KEY_UID: uid,
-        _ARGUMENT_KEY_PAYTYPE: payType,
-        _ARGUMENT_KEY_ORDERID: orderId,
-        _ARGUMENT_KEY_TOTAL: total,
-        _ARGUMENT_KEY_CURRENCYTYPE: currencyType,
-      },
-    );
   }
 
   /// 统计页面开始
