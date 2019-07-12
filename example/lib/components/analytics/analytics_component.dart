@@ -94,11 +94,11 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
                     anchorRoute: ModalRoute.of<dynamic>(context),
                     newRoute: CupertinoPageRoute<dynamic>(
                       builder: (BuildContext context) => LifecycleWidget(
-                            tracker: AnalyticsTracker(
-                              analytics: model.analytics,
-                            ),
-                            child: AboutComponent(),
-                          ),
+                        tracker: AnalyticsTracker(
+                          analytics: model.analytics,
+                        ),
+                        child: AboutComponent(),
+                      ),
                       settings: const RouteSettings(
                         name: AppNavigator.about,
                       ),
