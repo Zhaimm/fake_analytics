@@ -44,8 +44,8 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
           ListTile(
             title: const Text('popUntil'),
             onTap: () {
-              Navigator.of(context).popUntil(
-                  ModalRoute.withName(Navigator.defaultRouteName));
+              Navigator.of(context)
+                  .popUntil(ModalRoute.withName(Navigator.defaultRouteName));
             },
           ),
           ListTile(
@@ -55,8 +55,8 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
             },
           ),
           ListTile(
-            title: const Text(
-                'pushAndRemoveUntil/pushNamedAndRemoveUntil - 不支持'),
+            title:
+                const Text('pushAndRemoveUntil/pushNamedAndRemoveUntil - 不支持'),
             onTap: () {
               throw UnsupportedError('LifecycleObserver 不支持');
             },
@@ -64,8 +64,7 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
           ListTile(
             title: const Text('pushReplacement/pushReplacementNamed'),
             onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(AppNavigator.about);
+              Navigator.of(context).pushReplacementNamed(AppNavigator.about);
             },
           ),
           ListTile(

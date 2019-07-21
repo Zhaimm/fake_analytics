@@ -14,7 +14,7 @@ class ServiceViewModel extends Model {
     /// 非不得以，不在此初始化
     await analytics.startWork(
       appId: 'F4813AF882C147D6BD02732E8DE11A3B',
-      channelId: () => Future<String>.value('xxx'),//'xxx',
+      channelId: () => Future<String>.value('xxx'), //'xxx',
       enableDebug: !isReleaseMode,
     );
   }
