@@ -81,6 +81,9 @@ class _RawAppState extends State<_RawApp> {
       onGenerateTitle: (BuildContext context) {
         return 'Fake Analytics';
       },
+      theme: ThemeData.light().copyWith(
+        platform: TargetPlatform.iOS,
+      ),
     );
   }
 
