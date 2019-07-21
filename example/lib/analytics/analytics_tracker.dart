@@ -1,16 +1,17 @@
 import 'package:fake_analytics/fake_analytics.dart';
 import 'package:fake_lifecycle/fake_lifecycle.dart';
 import 'package:flutter/widgets.dart';
-import 'analytics_foundation.dart';
+
+String _defaultNameExtractor(Route<dynamic> route) => route.settings.name;
 
 class AnalyticsTracker implements LifecycleTracker {
   const AnalyticsTracker({
     @required this.analytics,
-    this.nameExtractor = defaultNameExtractor,
+    this.nameExtractor = _defaultNameExtractor,
   }) : assert(analytics != null);
 
   final Analytics analytics;
-  final AnalyticsNameExtractor nameExtractor;
+  final String Function(Route<dynamic> route) nameExtractor;
 
   @override
   void trackStartRoute({Route<dynamic> route}) {
@@ -20,13 +21,19 @@ class AnalyticsTracker implements LifecycleTracker {
   @override
   void trackResumeRoute({Route<dynamic> route}) {
     print('Resume - ${route.settings.name}');
-    analytics.startPageTracking(pageName: nameExtractor(route));
+    String pageName = nameExtractor(route);
+    if (pageName != null && pageName.isNotEmpty) {
+      analytics.startPageTracking(pageName: pageName);
+    }
   }
 
   @override
   void trackPauseRoute({Route<dynamic> route}) {
     print('Pause - ${route.settings.name}');
-    analytics.stopPageTracking(pageName: nameExtractor(route));
+    String pageName = nameExtractor(route);
+    if (pageName != null && pageName.isNotEmpty) {
+      analytics.stopPageTracking(pageName: pageName);
+    }
   }
 
   @override

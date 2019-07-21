@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -48,7 +50,7 @@ class Analytics {
   /// 开始统计
   Future<void> startWork({
     @required String appId,
-    @required AsyncValueGetter<String> channelId,
+    @required FutureOr<String> channelId(),
     bool enableDebug = false,
   }) async {
     assert(appId != null && appId.isNotEmpty);

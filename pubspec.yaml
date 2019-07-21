@@ -1,6 +1,6 @@
 name: fake_analytics
 description: A powerful talkingdata analytics plugin for Flutter.
-version: 0.2.3
+version: 0.3.0
 author: v7lin <v7lin@qq.com>
 homepage: https://github.com/v7lin/fake_analytics
 

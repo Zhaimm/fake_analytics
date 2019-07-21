@@ -1,14 +1,9 @@
+import 'package:fake_analytics_example/app/service_view_model.dart';
+import 'package:fake_analytics_example/navigator/navigator.dart';
 import 'package:fake_lifecycle/fake_lifecycle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../analytics/analytics_tracker.dart';
-import '../components/about/about_component.dart';
-import '../components/analytics/analytics_component.dart';
-import '../components/home/home_component.dart';
-import '../components/not_found/not_found_component.dart';
-import '../navigator/navigator.dart';
-import 'app_view_model.dart';
 
 class App extends StatefulWidget {
   @override
@@ -18,95 +13,104 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  AppViewModel _model = AppViewModel();
+  ServiceViewModel _service;
 
   @override
   void initState() {
     super.initState();
-    _model.initApp();
+    _service = ServiceViewModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<AppViewModel>(
-      model: _model,
-      child: _RawApp(),
+    return FutureBuilder<void>(
+      future: _service.initApp(),
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Builder(
+            builder: AppNavigator.routes[AppNavigator.splash],
+          );
+        }
+        return ScopedModel<ServiceViewModel>(
+          model: _service,
+          child: _RawApp(),
+        );
+      },
     );
   }
 }
 
-class _RawApp extends StatelessWidget {
-  final Map<String, WidgetBuilder> _routes = <String, WidgetBuilder>{
-    Navigator.defaultRouteName: (BuildContext context) => HomeComponent(),
-    AppNavigator.analytics: (BuildContext context) => AnalyticsComponent(),
-    AppNavigator.about: (BuildContext context) => AboutComponent(),
-  };
+class _RawApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _RawAppState();
+  }
+}
+
+class _RawAppState extends State<_RawApp> {
+  ServiceViewModel _service;
+
+  @override
+  void initState() {
+    super.initState();
+    _service = ServiceViewModel.of(context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<AppViewModel>(
-      builder: (
-        BuildContext context,
-        Widget child,
-        AppViewModel model,
-      ) {
-        LifecycleTracker tracker = AnalyticsTracker(
-          analytics: model.analytics,
-        );
-        return MaterialApp(
-          onGenerateRoute: (RouteSettings settings) =>
-              _onGenerateRoute(settings, tracker),
-          onUnknownRoute: (RouteSettings settings) =>
-              _onUnknownRoute(settings, tracker),
-          builder: (BuildContext context, Widget child) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                textScaleFactor: 1.0,
-                boldText: false,
-              ),
-              child: child,
-            );
-          },
-          navigatorObservers: <NavigatorObserver>[
-            LifecycleRouteObserver(
-              tracker: tracker,
-            ),
-          ],
-          theme: ThemeData.light().copyWith(
-            platform: TargetPlatform.iOS,
+    return MaterialApp(
+      onGenerateRoute: (RouteSettings settings) =>
+          _onGenerateRoute(settings, _service.tracker),
+      onUnknownRoute: (RouteSettings settings) =>
+          _onUnknownRoute(settings, _service.tracker),
+      navigatorObservers: <NavigatorObserver>[
+        LifecycleRouteObserver(
+          tracker: _service.tracker,
+        ),
+      ],
+      builder: (BuildContext context, Widget child) {
+        /// 禁用系统字体控制
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaleFactor: 1.0,
+            boldText: false,
           ),
+          child: child,
         );
+      },
+      onGenerateTitle: (BuildContext context) {
+        return 'Fake Analytics';
       },
     );
   }
 
   Route<dynamic> _onGenerateRoute(
-    RouteSettings settings,
-    LifecycleTracker tracker,
-  ) {
-    WidgetBuilder builder = _routes[settings.name];
+      RouteSettings settings, LifecycleTracker tracker) {
+    if (AppNavigator.routes.containsKey(settings.name)) {
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          return LifecycleWidget(
+            tracker: tracker,
+            child: Builder(
+              builder: AppNavigator.routes[settings.name],
+            ),
+          );
+        },
+        settings: settings,
+      );
+    }
+    return null;
+  }
+
+  Route<dynamic> _onUnknownRoute(
+      RouteSettings settings, LifecycleTracker tracker) {
     return MaterialPageRoute<dynamic>(
       builder: (BuildContext context) {
         return LifecycleWidget(
           tracker: tracker,
           child: Builder(
-            builder: builder,
+            builder: AppNavigator.routes[AppNavigator.notFound],
           ),
-        );
-      },
-      settings: settings,
-    );
-  }
-
-  Route<dynamic> _onUnknownRoute(
-    RouteSettings settings,
-    LifecycleTracker tracker,
-  ) {
-    return MaterialPageRoute<dynamic>(
-      builder: (BuildContext context) {
-        return LifecycleWidget(
-          tracker: tracker,
-          child: NotFoundComponent(),
         );
       },
       settings: settings,
