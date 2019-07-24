@@ -10,15 +10,6 @@ class ServiceViewModel extends Model {
 
   Analytics get analytics => _analytics ?? (_analytics = Analytics());
 
-  Future<void> initApp() async {
-    /// 非不得以，不在此初始化
-    await analytics.startWork(
-      appId: 'F4813AF882C147D6BD02732E8DE11A3B',
-      channelId: () => Future<String>.value('xxx'), //'xxx',
-      enableDebug: !isReleaseMode,
-    );
-  }
-
   LifecycleTracker get tracker =>
       _tracker ?? (_tracker = AnalyticsTracker(analytics: analytics));
 

@@ -14,28 +14,36 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   ServiceViewModel _service;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
     _service = ServiceViewModel();
+    _setupApp();
+  }
+
+  Future<void> _setupApp() async {
+    /// 非不得以，不在此初始化
+    await _service.analytics.startWork(
+      appId: 'F4813AF882C147D6BD02732E8DE11A3B',
+      channelId: () => Future<String>.value('xxx'), //'xxx',
+      enableDebug: !_service.isReleaseMode,
+    );
+    _initialized = true;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _service.initApp(),
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return Builder(
-            builder: AppNavigator.routes[AppNavigator.splash],
-          );
-        }
-        return ScopedModel<ServiceViewModel>(
-          model: _service,
-          child: _RawApp(),
-        );
-      },
+    if (!_initialized) {
+      return Builder(
+        builder: AppNavigator.routes[AppNavigator.splash],
+      );
+    }
+    return ScopedModel<ServiceViewModel>(
+      model: _service,
+      child: _RawApp(),
     );
   }
 }
