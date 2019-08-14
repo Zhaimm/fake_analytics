@@ -18,7 +18,7 @@ dev_dependencies:
     sdk: flutter
 
   scoped_model: ^1.0.1
-  fake_lifecycle: ^0.1.1
+  fake_lifecycle: ^0.1.2
 
   pedantic: '>=1.4.0 <3.0.0'
 

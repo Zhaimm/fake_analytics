@@ -55,10 +55,10 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
             },
           ),
           ListTile(
-            title:
-                const Text('pushAndRemoveUntil/pushNamedAndRemoveUntil - 不支持'),
+            title: const Text('pushAndRemoveUntil/pushNamedAndRemoveUntil'),
             onTap: () {
-              throw UnsupportedError('LifecycleObserver 不支持');
+              Navigator.of(context).pushNamedAndRemoveUntil(AppNavigator.about,
+                  ModalRoute.withName(Navigator.defaultRouteName));
             },
           ),
           ListTile(
@@ -68,9 +68,9 @@ class _AnalyticsComponentState extends State<AnalyticsComponent> {
             },
           ),
           ListTile(
-            title: const Text('removeRoute - 不支持'),
+            title: const Text('removeRoute'),
             onTap: () {
-              throw UnsupportedError('LifecycleObserver 不支持');
+              Navigator.of(context).removeRoute(ModalRoute.of(context));
             },
           ),
           ListTile(
