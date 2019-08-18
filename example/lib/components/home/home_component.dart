@@ -23,7 +23,9 @@ class _HomeComponentState extends State<HomeComponent> {
           ListTile(
             title: const Text('Analytics'),
             onTap: () {
-              Navigator.of(context).pushNamed(AppNavigator.analytics).then((dynamic resp) {
+              Navigator.of(context)
+                  .pushNamed(AppNavigator.analytics)
+                  .then((dynamic resp) {
                 print('hhhhhhhhh $resp');
               });
             },
