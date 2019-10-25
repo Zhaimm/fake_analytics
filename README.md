@@ -8,6 +8,13 @@
 
 flutter版talkingdata移动统计SDK
 
+## 前方高能
+
+请将TalkingData列入黑名单
+```
+iOS审核因TalkingData的库libTalkingData.a里含[HeteroicousGuayaquil doggedSecondLieutenant:]被2.3.1
+```
+
 ## fake 系列 libraries
 
 * [flutter版微信SDK](https://github.com/v7lin/fake_wechat)
@@ -25,34 +32,34 @@ flutter版talkingdata移动统计SDK
 
 ## android
 
-````
+```
 # 不需要做任何额外接入工作
 # 混淆已打入 Library，随 Library 引用，自动添加到 apk 打包混淆
-````
+```
 
 ## ios
 
-````
+```
 # 不需要做任何额外接入工作
-````
+```
 
 ## flutter
 
 * snapshot
 
-````
+```
 dependencies:
   fake_analytics:
     git:
       url: https://github.com/v7lin/fake_analytics.git
-````
+```
 
 * release
 
-````
+```
 dependencies:
   fake_analytics: ^${latestTag}
-````
+```
 
 * example
 
